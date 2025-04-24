@@ -2,15 +2,15 @@ package lineales;
 
 import modelos.I_Cola;
 
-public class LEGCola<E> implements I_Cola<E> {
+public class LEGCola<E> extends LEGConUltimo<E> implements I_Cola<E> {
     private LEGConUltimo<E> lista;
 
     public LEGCola() {
         lista = new LEGConUltimo<>();
     }
 
-    public void encolar(E elem) {
-        lista.insertarFinal(elem);
+    public void encolar(E elemento) {
+        lista.insertarAlFinal(elemento);
     }
 
     public E desencolar() {
@@ -19,14 +19,6 @@ public class LEGCola<E> implements I_Cola<E> {
 
     public E primero() {
         return lista.primero();
-    }
-
-    public boolean esVacia() {
-        return lista.esVacia();
-    }
-
-    public void vaciar() {
-        lista.vaciar();
     }
 
     public String toString() {

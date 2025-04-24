@@ -63,4 +63,18 @@ public class LEG<E> implements I_LEG<E> {
     public void vaciar() {
         primero = null;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        NodoLEG<E> actual = primero;
+        while (actual != null) {
+            sb.append(actual.dato);
+            if (actual.siguiente != null) sb.append(", ");
+            actual = actual.siguiente;
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
 }

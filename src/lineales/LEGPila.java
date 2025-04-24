@@ -2,7 +2,7 @@ package lineales;
 
 import modelos.I_Pila;
 
-public class LEGPila<E> implements I_Pila<E> {
+public class LEGPila<E> extends LEG<E> implements I_Pila<E> {
     private LEG<E> lista;
 
     public LEGPila() {
@@ -10,7 +10,7 @@ public class LEGPila<E> implements I_Pila<E> {
     }
 
     public void apilar(E elem) {
-        lista.insertar(elem);
+        lista.insertarAlInicio(elem);
     }
 
     public E desapilar() {
@@ -19,14 +19,6 @@ public class LEGPila<E> implements I_Pila<E> {
 
     public E cima() {
         return lista.primero();
-    }
-
-    public boolean esVacia() {
-        return lista.esVacia();
-    }
-
-    public void vaciar() {
-        lista.vaciar();
     }
 
     public String toString() {
