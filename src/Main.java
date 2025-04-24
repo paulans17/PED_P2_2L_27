@@ -1,5 +1,172 @@
-public class Main {
-    public static void main(String[] args) {
+//LIBRERIAS
+import java.util.Scanner;
 
+//PAQUETES
+import lineales.*;
+import modelos.*;
+
+public class Main {
+
+    static Scanner sc = new Scanner(System.in);
+
+    //STRUCTS PRINCIPALES
+    static LEGPila<Integer> p;
+    static LEGCola<Integer> c1;
+    static LEGCola<Integer> c2;
+
+    //COPIAS
+    static LEGPila<Integer> copiaOriginalPila;
+    static LEGCola<Integer> copiaOriginalCola1;
+    static LEGCola<Integer> copiaOriginalCola2;
+
+    public static void main(String[] args) {
+        inicializarEstructuras();
+        mostrarMenuPrincipal();
+    }
+
+    public static void inicializarEstructuras() {
+        p = new LEGPila<>();
+        c1 = new LEGCola<>();
+        c2 = new LEGCola<>();
+
+        // PILA: 5, 3, 5, 2, 1
+        p.apilar(1);
+        p.apilar(2);
+        p.apilar(5);
+        p.apilar(3);
+        p.apilar(5);
+
+        // COLA C1: 5, 13, 5, 21, 30
+        c1.encolar(5);
+        c1.encolar(13);
+        c1.encolar(5);
+        c1.encolar(21);
+        c1.encolar(30);
+
+        // COLA C2: 6, 27, 5, 1, 21, 13
+        c2.encolar(6);
+        c2.encolar(27);
+        c2.encolar(5);
+        c2.encolar(1);
+        c2.encolar(21);
+        c2.encolar(13);
+
+        //CLONACIÓN DE ESTRUCTURAS ORGIGINALES
+        copiaOriginalPila = clonarPila(p);
+        copiaOriginalCola1 = clonarCola(c1);
+        copiaOriginalCola2 = clonarCola(c2);
+    }
+
+    private static void mostrarMenuPrincipal() {
+        int opcion;
+        do {
+            System.out.println("\tMENÚ PRINCIPAL");
+            System.out.println("1. Practicar con PILAS");
+            System.out.println("2. Practicar con COLAS");
+            System.out.println("0. Salir");
+            System.out.print("Elige una opción: ");
+            opcion = sc.nextInt();
+            sc.nextLine(); // Limpiar buffer
+
+            switch (opcion) {
+                case 1 -> menuPilas();
+                case 2 -> menuColas();
+                case 0 -> System.out.println("Adios");
+                default -> System.out.println("Opción no válida");
+            }
+        } while (opcion != 0);
+    }
+
+    private static void menuPilas() {
+        int opcion;
+        do {
+            System.out.println("\tSUBMENÚ DE PILAS");
+            System.out.println("1. Restaurar pila");
+            System.out.println("2. Eliminar elementos = nº de elementos (Iterativo)");
+            System.out.println("3. Eliminar elementos = nº de elementos (Recursivo)");
+            System.out.println("4. Eliminar duplicados");
+            System.out.println("5. Detectar secuencias consecutivas");
+            System.out.println("0. Volver al menú principal");
+            System.out.print("Opción: ");
+            opcion = sc.nextInt();
+
+            switch (opcion) {
+                case 1 -> p = clonarPila(copiaOriginalPila);
+                case 2 -> System.out.println("→ Implementar método iterativo.");
+                case 3 -> System.out.println("→ Implementar método recursivo.");
+                case 4 -> System.out.println("→ Implementar eliminación de duplicados.");
+                case 5 -> System.out.println("→ Implementar detección de secuencias.");
+                case 0 -> System.out.println("Volviendo al menú principal...");
+                default -> System.out.println("Opción incorrecta.");
+            }
+
+            System.out.println("Pila actual: " + p);
+
+        } while (opcion != 0);
+    }
+
+    private static void menuColas() {
+        int opcion;
+        do {
+            System.out.println("\tSUBMENÚ DE COLAS");
+            System.out.println("1. Restaurar colas");
+            System.out.println("2. Eliminar elementos = nº de elementos (Recursivo)");
+            System.out.println("3. Rotación circular de cola c1");
+            System.out.println("4. Intersección de colas");
+            System.out.println("0. Volver al menú principal");
+            System.out.print("Opción: ");
+            opcion = sc.nextInt();
+
+            switch (opcion) {
+                case 1 -> {
+                    c1 = clonarCola(copiaOriginalCola1);
+                    c2 = clonarCola(copiaOriginalCola2);
+                    System.out.println("Colas restauradas");
+                }
+                case 2 -> System.out.println("→ Implementar método recursivo.");
+                case 3 -> System.out.println("→ Implementar rotación circular.");
+                case 4 -> System.out.println("→ Implementar intersección.");
+                case 0 -> System.out.println("Volviendo al menú principal...");
+                default -> System.out.println("Opción incorrecta.");
+            }
+
+            System.out.println("Cola c1: " + c1);
+            System.out.println("Cola c2: " + c2);
+
+        } while (opcion != 0);
+    }
+
+    private static LEGPila<Integer> clonarPila(LEGPila<Integer> original) {
+        LEGPila<Integer> copia = new LEGPila<>();
+        LEGPila<Integer> auxiliar = new LEGPila<>();
+
+        while (!original.esVacia()) {
+            int elemento = original.desapilar();
+            auxiliar.apilar(elemento);
+        }
+
+        while (!auxiliar.esVacia()) {
+            int elemento = auxiliar.desapilar();
+            original.apilar(elemento);
+            copia.apilar(elemento);
+        }
+        return copia;
+    }
+
+    private static LEGCola<Integer> clonarCola(LEGCola<Integer> original) {
+        LEGCola<Integer> copia = new LEGCola<>();
+        LEGCola<Integer> auxiliar = new LEGCola<>();
+
+        while (!original.esVacia()) {
+            int elemento = original.desencolar();
+            auxiliar.encolar(elemento);
+        }
+
+        while (!auxiliar.esVacia()) {
+            int elemento = auxiliar.desencolar();
+            original.encolar(elemento);
+            copia.encolar(elemento);
+        }
+        return copia;
     }
 }
