@@ -2,7 +2,7 @@ package lineales;
 
 import modelos.I_LEGConUltimo;
 
-public class LEGConUltimo<E> implements I_LEGConUltimo<E> {
+public class LEGConUltimo<E> extends LEG<E> implements I_LEGConUltimo<E> {
     private static class NodoLEGConUltimo<E> {
         private final E dato;
         private NodoLEGConUltimo<E> siguiente;
@@ -38,11 +38,6 @@ public class LEGConUltimo<E> implements I_LEGConUltimo<E> {
     }
 
     @Override
-    public boolean esVacia() {
-        return primero == null;
-    }
-
-    @Override
     public E eliminarPrimero() {
         if (esVacia()) {
             return null;
@@ -53,14 +48,6 @@ public class LEGConUltimo<E> implements I_LEGConUltimo<E> {
             ultimo = null; // Si la lista queda vacía, también actualizamos el último
         }
         return dato;
-    }
-
-    @Override
-    public E primero() {
-        if (esVacia()) {
-            return null;
-        }
-        return primero.dato;
     }
 
     @Override
