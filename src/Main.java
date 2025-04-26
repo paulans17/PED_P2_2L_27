@@ -55,6 +55,11 @@ public class Main {
         copiaOriginalPila = clonarPila(p);
         copiaOriginalCola1 = clonarCola(c1);
         copiaOriginalCola2 = clonarCola(c2);
+
+        //IMPRIMIR ESTRUCTURAS
+        System.out.println("PILA CREADA: " + p);
+        System.out.println("COLA C1 CREADA: " + c1);
+        System.out.println("COLA C2 CREADA: " + c2);
     }
 
     private static void mostrarMenuPrincipal() {
@@ -80,7 +85,9 @@ public class Main {
     private static void menuPilas() {
         int opcion;
         do {
-            System.out.println("\tSUBMENÚ DE PILAS");
+            System.out.println("Pila actual: " + p);
+
+            System.out.println("\n\tSUBMENÚ DE PILAS");
             System.out.println("1. Restaurar pila");
             System.out.println("2. Eliminar elementos = nº de elementos (Iterativo)");
             System.out.println("3. Eliminar elementos = nº de elementos (Recursivo)");
@@ -100,15 +107,16 @@ public class Main {
                 default -> System.out.println("Opción incorrecta.");
             }
 
-            System.out.println("Pila actual: " + p);
-
         } while (opcion != 0);
     }
 
     private static void menuColas() {
         int opcion;
         do {
-            System.out.println("\tSUBMENÚ DE COLAS");
+            System.out.println("Cola c1: " + c1);
+            System.out.println("Cola c2: " + c2);
+
+            System.out.println("\n\tSUBMENÚ DE COLAS");
             System.out.println("1. Restaurar colas");
             System.out.println("2. Eliminar elementos = nº de elementos (Recursivo)");
             System.out.println("3. Rotación circular de cola c1");
@@ -129,9 +137,6 @@ public class Main {
                 case 0 -> System.out.println("Volviendo al menú principal...");
                 default -> System.out.println("Opción incorrecta.");
             }
-
-            System.out.println("Cola c1: " + c1);
-            System.out.println("Cola c2: " + c2);
 
         } while (opcion != 0);
     }

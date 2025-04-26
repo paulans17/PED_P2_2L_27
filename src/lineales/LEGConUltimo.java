@@ -17,6 +17,16 @@ public class LEGConUltimo<E> extends LEG<E> implements I_LEGConUltimo<E> {
     private NodoLEGConUltimo<E> ultimo;
 
     @Override
+    public boolean esVacia() {
+        return primero == null;
+    }
+
+    @Override
+    public E primero() {
+        return esVacia() ? null : primero.dato;
+    }
+
+    @Override
     public void insertarAlInicio(E elemento) {
         NodoLEGConUltimo<E> nuevo = new NodoLEGConUltimo<>(elemento);
         nuevo.siguiente = primero;
@@ -81,4 +91,18 @@ public class LEGConUltimo<E> extends LEG<E> implements I_LEGConUltimo<E> {
         primero = null;
         ultimo = null;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        NodoLEGConUltimo<E> actual = primero;
+        while (actual != null) {
+            sb.append(actual.dato);
+            if (actual.siguiente != null) sb.append(", ");
+            actual = actual.siguiente;
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
 }
