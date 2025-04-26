@@ -3,7 +3,6 @@ import java.util.Scanner;
 
 //PAQUETES
 import lineales.*;
-import modelos.*;
 
 public class Main {
 
@@ -96,13 +95,14 @@ public class Main {
             System.out.println("0. Volver al menú principal");
             System.out.print("Opción: ");
             opcion = sc.nextInt();
+            sc.nextLine(); // Limpiar buffer
 
             switch (opcion) {
                 case 1 -> p = clonarPila(copiaOriginalPila);
-                case 2 -> System.out.println("→ Implementar método iterativo.");
-                case 3 -> System.out.println("→ Implementar método recursivo.");
-                case 4 -> System.out.println("→ Implementar eliminación de duplicados.");
-                case 5 -> System.out.println("→ Implementar detección de secuencias.");
+                case 2 -> eliminarElementosPilaIterativo();
+                case 3 -> eliminarElementosPilaRecursivo();
+                case 4 -> eliminarDuplicadosPila();
+                case 5 -> detectarSecuenciasPila();
                 case 0 -> System.out.println("Volviendo al menú principal...");
                 default -> System.out.println("Opción incorrecta.");
             }
@@ -124,6 +124,7 @@ public class Main {
             System.out.println("0. Volver al menú principal");
             System.out.print("Opción: ");
             opcion = sc.nextInt();
+            sc.nextLine(); // Limpiar buffer
 
             switch (opcion) {
                 case 1 -> {
@@ -174,4 +175,122 @@ public class Main {
         }
         return copia;
     }
+
+    //SUBMENUS PILAS
+    private static void eliminarElementosPilaIterativo() {
+        LEGPila<Integer> auxiliar = new LEGPila<>();
+        int contador = 0;
+
+        while (!p.esVacia()) {
+            auxiliar.apilar(p.desapilar());
+            contador++;
+        }
+
+        while (!auxiliar.esVacia()) {
+            int valor = auxiliar.desapilar();
+            if (valor != contador) {
+                p.apilar(valor);
+            }
+        }
+
+        System.out.println("→ Pila tras eliminar elementos == " + contador + ": " + p);
+    }
+
+    private static int contarRec(LEGPila<Integer> pila) {
+        if (pila.esVacia()) return 0;
+        int x = pila.desapilar();
+        int cuenta = 1 + contarRec(pila);
+        pila.apilar(x);
+        return cuenta;
+    }
+
+    private static void eliminarRecAux(LEGPila<Integer> pila, int total) {
+        if (pila.esVacia()) return;
+        int x = pila.desapilar();
+        eliminarRecAux(pila, total);
+        if (x != total) pila.apilar(x);
+    }
+
+    private static void eliminarElementosPilaRecursivo() {
+        int n = contarRec(p);
+        eliminarRecAux(p, n);
+        System.out.println("→ Pila tras eliminación recursiva: " + p);
+    }
+
+    private static void eliminarDuplicadosPila() {
+        LEGPila<Integer> aux = new LEGPila<>();
+        LEGPila<Integer> temp = new LEGPila<>();
+        while (!p.esVacia()) {
+            int x = p.desapilar();
+            boolean encontrado = false;
+            while (!aux.esVacia()) {
+                if (aux.cima().equals(x)) {
+                    encontrado = true;
+                }
+                temp.apilar(aux.desapilar());
+            }
+            while (!temp.esVacia()) {
+                aux.apilar(temp.desapilar());
+            }
+            if (!encontrado) {
+                aux.apilar(x);
+            }
+        }
+        while (!aux.esVacia()) {
+            p.apilar(aux.desapilar());
+        }
+        System.out.println("→ Pila tras eliminar duplicados: " + p);
+    }
+
+    private static void detectarSecuenciasPila() {
+        System.out.print("Introduce una secuencia de enteros separados por espacios: ");
+        String linea = sc.nextLine();
+        if (linea == null || linea.trim().isEmpty()) {
+            System.out.println("No hay datos.");
+            return;
+        }
+        String[] tokens = linea.trim().split("\\s+");
+        LEGPila<Integer> pilaSecuencia = new LEGPila<>();
+        for (String t : tokens) {
+            if (!t.isEmpty()) {
+                pilaSecuencia.apilar(Integer.parseInt(t));
+            }
+        }
+        LEGPila<Integer> aux = new LEGPila<>();
+        while (!pilaSecuencia.esVacia()) aux.apilar(pilaSecuencia.desapilar());
+        if (aux.esVacia()) {
+            System.out.println("No hay datos.");
+            return;
+        }
+        int prev = aux.desapilar(), start = prev, count = 1;
+        boolean found = false;
+        while (!aux.esVacia()) {
+            int curr = aux.desapilar();
+            if (curr == prev + 1) {
+                count++;
+            } else {
+                found = isFound(prev, start, count, found);
+                start = curr;
+                count = 1;
+            }
+            prev = curr;
+        }
+        found = isFound(prev, start, count, found);
+        if (!found) System.out.println("No se han encontrado secuencias consecutivas.");
+    }
+
+    private static boolean isFound(int prev, int start, int count, boolean found) {
+        if (count > 1) {
+            System.out.print("[");
+            for (int v = start; v <= prev; v++) {
+                System.out.print(v);
+                if (v < prev) System.out.print(", ");
+            }
+            System.out.println("]");
+            found = true;
+        }
+        return found;
+    }
+
+
 }
