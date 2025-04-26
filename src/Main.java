@@ -6,24 +6,24 @@ import lineales.*;
 
 public class Main {
 
-    static Scanner sc = new Scanner(System.in);
+    private static Scanner sc = new Scanner(System.in);
 
     //STRUCTS PRINCIPALES
-    static LEGPila<Integer> p;
-    static LEGCola<Integer> c1;
-    static LEGCola<Integer> c2;
+    private static LEGPila<Integer> p;
+    private static LEGCola<Integer> c1;
+    private static LEGCola<Integer> c2;
 
     //COPIAS
-    static LEGPila<Integer> copiaOriginalPila;
-    static LEGCola<Integer> copiaOriginalCola1;
-    static LEGCola<Integer> copiaOriginalCola2;
+    private static LEGPila<Integer> copiaOriginalPila;
+    private static LEGCola<Integer> copiaOriginalCola1;
+    private static LEGCola<Integer> copiaOriginalCola2;
 
     public static void main(String[] args) {
         inicializarEstructuras();
         mostrarMenuPrincipal();
     }
 
-    public static void inicializarEstructuras() {
+    private static void inicializarEstructuras() {
         p = new LEGPila<>();
         c1 = new LEGCola<>();
         c2 = new LEGCola<>();
@@ -132,9 +132,12 @@ public class Main {
                     c2 = clonarCola(copiaOriginalCola2);
                     System.out.println("Colas restauradas");
                 }
-                case 2 -> System.out.println("→ Implementar método recursivo.");
-                case 3 -> System.out.println("→ Implementar rotación circular.");
-                case 4 -> System.out.println("→ Implementar intersección.");
+                case 2 -> eliminarElementosColaRecursivo();
+                case 3 -> rotacionCircularCola();
+                case 4 -> {
+                    LEGCola<Integer> inter = interseccionDeColas();
+                    System.out.println("→ Intersección de colas: " + inter);
+                }
                 case 0 -> System.out.println("Volviendo al menú principal...");
                 default -> System.out.println("Opción incorrecta.");
             }
@@ -292,5 +295,67 @@ public class Main {
         return found;
     }
 
+    //SUBMENUS COLAS
+    private static int originalCountCola;
+
+    private static void eliminarElementosColaRecursivo() {
+        originalCountCola = 0;
+        eliminarRecursivoCola(c1, 1);
+        System.out.println("→ Cola c1 tras eliminación recursiva: " + c1);
+    }
+
+    private static void eliminarRecursivoCola(LEGCola<Integer> cola, int depth) {
+        if (cola.esVacia()) {
+            originalCountCola = depth - 1;
+            return;
+        }
+        int x = cola.desencolar();
+        eliminarRecursivoCola(cola, depth + 1);
+        if (x != originalCountCola) {
+            cola.encolar(x);
+        }
+    }
+
+
+    private static void rotacionCircularCola() {
+        System.out.print("¿Cuántas rotaciones deseas? ");
+        int n = sc.nextInt(); sc.nextLine();
+        if (!c1.esVacia()) {
+            for (int i = 0; i < n; i++) {
+                c1.encolar(c1.desencolar());
+            }
+        }
+        System.out.println("→ Cola c1 tras rotación: " + c1);
+    }
+
+    private static LEGCola<Integer> interseccionDeColas() {
+        LEGCola<Integer> aux1 = clonarCola(c1);
+        LEGCola<Integer> aux2 = clonarCola(c2);
+        LEGCola<Integer> resultado = new LEGCola<>();
+        while (!aux1.esVacia()) {
+            int x = aux1.desencolar();
+            boolean enC2 = false;
+            LEGCola<Integer> temp2 = new LEGCola<>();
+            while (!aux2.esVacia()) {
+                int y = aux2.desencolar();
+                temp2.encolar(y);
+                if (y == x) enC2 = true;
+            }
+            while (!temp2.esVacia()) aux2.encolar(temp2.desencolar());
+
+            if (enC2) {
+                boolean ya = false;
+                LEGCola<Integer> tempR = new LEGCola<>();
+                while (!resultado.esVacia()) {
+                    int z = resultado.desencolar();
+                    tempR.encolar(z);
+                    if (z == x) ya = true;
+                }
+                while (!tempR.esVacia()) resultado.encolar(tempR.desencolar());
+                if (!ya) resultado.encolar(x);
+            }
+        }
+        return resultado;
+    }
 
 }
